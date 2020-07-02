@@ -1,21 +1,24 @@
-// const mongoose = require('mongoose')
-// const Schema = mongoose.Schema
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
-// const dataSchema = new Schema({
-//     "Date": Date,
-//     "countryData":[
-//         {
-//             "CountryName": String,
+const dataSchema = new Schema({
+    "Date": Date,
+   
+    "countryData":[
+        {
+            "CountryName": Array,
+            "TotalCases": Array,
+            "NewCases": Array,
+            "TotalDeaths": Array,
+            "NewDeaths": Array,
+            "TotalRecovered": Array,
+            "ActiveCases": Array,
+            "Serious": Array,
+            "Population": Array,
 
-//         }
-//     ]
+        }
+    ]
 
-// })
-const abc  = require('../webScrpar/pageScrapper')
-async function f(){
-    const c = {
-        "user": await (await abc.sData()).Country
-    }
-    console.log(c.user);
-}
-module.exports.f = f
+})
+
+module.exports =  mongoose.model('DataModel', dataSchema)

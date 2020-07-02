@@ -5,10 +5,15 @@
  var tabletojson = require('tabletojson').Tabletojson;
  const fs = require('fs');
  const cheerioTableparser = require('cheerio-tableparser');
- const maintainData = require('./dataModel');
+
+ 
+ 
+ 
+ 
 //const cheerioTableparser = require('cheerio-tableparser');
 
 async function sData(){
+  
 
   try {
     const result = await request.get("https://www.worldometers.info/coronavirus/");
@@ -47,14 +52,14 @@ async function sData(){
       let ActiveCases = []
       let Serious = []
       let Population =[]
-      
+      const dTime = new Date().toLocaleString()
+      let missingCountry=[]      
 
       makeArrayData = await (gatherData.split('\n'))
   
       for(let i = 0; i<=makeArrayData.length; i++){
         for(let j = 0; j<=uniqueCountryName.length; j++){
-          if(makeArrayData[i]=== uniqueCountryName[j]){
-            
+          if(makeArrayData[i]=== uniqueCountryName[j]){            
             Country.push(uniqueCountryName[j])
             TotalCases.push(makeArrayData[i+1])
             NewCases.push(makeArrayData[i+2])
@@ -66,25 +71,19 @@ async function sData(){
             Serious.push(makeArrayData[i+8])
             Population.push(makeArrayData[i+13])
 
-          }
-        
-        }
-        
-      }
-      console.log(Population);
+          }        
+        }        
+      }      
       
-      return{Country,TotalCases,NewCases,TotalDeaths,NewDeaths,TotalRecovered,ActiveCases,Serious,Population}
+      return{dTime,Country,TotalCases,NewCases,TotalDeaths,NewDeaths,TotalRecovered,ActiveCases,Serious,Population}
 
     }
     const getData = await dataManufacture(gatherData,uniqueCountryName)
     return getData
   } 
   catch (error) {
-    console.log(error)
-    
+    console.log(error)    
   }
- 
-
 }
 
 
@@ -92,5 +91,5 @@ async function sData(){
 
   
 
-module.exports.sData = sData()
+module.exports.sData = sData
 
