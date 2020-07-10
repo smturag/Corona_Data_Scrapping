@@ -8,8 +8,6 @@
 
  
  
- 
- 
 //const cheerioTableparser = require('cheerio-tableparser');
 
 async function sData(){
@@ -32,15 +30,13 @@ async function sData(){
     }
     let uniqueCountryName=[]
    
-   uniqueCountryName = await countryName.filter(uniqueValue)
-   
+   uniqueCountryName = await countryName.filter(uniqueValue)   
     
     let gatherData =[]
     await $('#main_table_countries_today ').each((i,e)=>{
       gatherData=($(e).text());
     })
-    
-    
+
     async function dataManufacture(gatherData,uniqueCountryName){
       let Country = []
       let TotalCases =[]
@@ -53,7 +49,7 @@ async function sData(){
       let Serious = []
       let Population =[]
       const dTime = new Date().toLocaleString()
-      let missingCountry=[]      
+      let missingCountry=[]
 
       makeArrayData = await (gatherData.split('\n'))
   
@@ -73,11 +69,12 @@ async function sData(){
 
           }        
         }        
-      }      
-      
+      }   
+            
       return{dTime,Country,TotalCases,NewCases,TotalDeaths,NewDeaths,TotalRecovered,ActiveCases,Serious,Population}
 
     }
+    
     const getData = await dataManufacture(gatherData,uniqueCountryName)
     return getData
   } 
@@ -85,9 +82,6 @@ async function sData(){
     console.log(error)    
   }
 }
-
-
-
 
   
 
