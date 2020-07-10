@@ -48,7 +48,7 @@ async function sData(){
       let ActiveCases = []
       let Serious = []
       let Population =[]
-      const dTime = new Date().toLocaleString()
+      // const dTime = new Date().toLocaleString()
       let missingCountry=[]
 
       makeArrayData = await (gatherData.split('\n'))
@@ -71,7 +71,7 @@ async function sData(){
         }        
       }   
             
-      return{dTime,Country,TotalCases,NewCases,TotalDeaths,NewDeaths,TotalRecovered,ActiveCases,Serious,Population}
+      return{Country,TotalCases,NewCases,TotalDeaths,NewDeaths,TotalRecovered,ActiveCases,Serious,Population}
 
     }
     

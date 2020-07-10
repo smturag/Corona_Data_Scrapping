@@ -13,7 +13,7 @@ app.get('/',function(req,res){
 
 
  app.use('/api',routerApi)
- app.use('/inserting',insertingData)
+ app.use('/api',insertingData)
 
 
 const exportPort =  app.listen(port,console.log(`Running on port: ${port}`))

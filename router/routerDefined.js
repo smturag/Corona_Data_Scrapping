@@ -27,18 +27,21 @@ router.use(bodyParser.urlencoded({extended: true}));
     //find country wise data 
     const dataCountryName = async function (req,res){
         try {
-            let t = new Date
-            
-            const getTime = new Date().toLocaleString()
+                
+            let date = req.params.date
             let databaseCountryName = req.params.cn
             console.log(databaseCountryName);
-            let getIndex = await DataModel.aggregate([{$project:{
-                _id:1,
-                index:{$indexOfArray:["$CountryData.CountryName",databaseCountryName]}}
-            }])
-            console.log(getTime);
-
-
+            console.log(date)
+            let getCountryData = await DataModel.aggregate([{$project:{
+                _id: 0, 
+                TotalCases:{$arrayElemAt:["$CountryData.TotalCases", {$indexOfArray:["$CountryData.CountryName",databaseCountryName]}]},
+                NewCases:{$arrayElemAt:["$CountryData.NewCases", {$indexOfArray:["$CountryData.CountryName",databaseCountryName]}]}
+            
+            }}])
+            
+                // {index:{$indexOfArray:["$CountryData.CountryName",databaseCountryName]}}])
+               
+            res.send(JSON.stringify(getCountryData))
         } catch (error) {
             console.log(error);
             
@@ -57,7 +60,7 @@ router.use(bodyParser.urlencoded({extended: true}));
     }
     
     router.get('/findAllData',getData).
-    get('/dataCountryname/:cn',dataCountryName).
+    get('/dataCountryname/:date/:cn',dataCountryName).
     get('/getCountryName', getCountryName)
      
 
