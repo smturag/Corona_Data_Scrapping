@@ -48,7 +48,7 @@ async function sData(){
       let ActiveCases = []
       let Serious = []
       let Population =[]
-      // const dTime = new Date().toLocaleString()
+      //const dTime = new Date().toLocaleString().replace(/T/, ' ').replace(/\..+/, '')
       let missingCountry=[]
 
       makeArrayData = await (gatherData.split('\n'))

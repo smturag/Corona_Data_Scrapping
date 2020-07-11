@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const dataSchema = new Schema({     
-        "Date": Number,
+        "Date": String,
         "CountryData":{
         "CountryName": [String],
         "TotalCases": [String],

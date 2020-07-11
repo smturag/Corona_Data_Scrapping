@@ -10,13 +10,16 @@ router.use(bodyParser.urlencoded({extended: true}));
 
 
  const postData = async function (req,res,next){
-    let cSize = await (await sData.sData()).Country.length
+    let cSize = await (await sData.sData()).Country.length  
     console.log(cSize);
-    let tdate = Date.parse(new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''))
-    let td = Date.parse(new Date())
+    var nowDate = new Date(); 
+    var tdate = nowDate.getDate()+'-'+(nowDate.getMonth()+1)+'-'+nowDate.getFullYear();
+    // let tdate = new Date().toLocaleString().replace('/','-' ).replace('/','-' ).
+    
         
         const dataInsert = new DataModel({
-            "Date": td,
+            "Date": tdate,
+            //"Date": await (await sData.sData()).dTime,
             "CountryData":{
             "CountryName": await (await sData.sData()).Country,
             "TotalCases":await (await sData.sData()).TotalCases,

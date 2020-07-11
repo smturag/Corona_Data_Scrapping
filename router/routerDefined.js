@@ -25,21 +25,24 @@ router.use(bodyParser.urlencoded({extended: true}));
     }
 
     //find country wise data 
-    const dataCountryName = async function (req,res){
+    const getDataDateMatching = async function (req,res){
         try {
                 
             let date = req.params.date
-            let databaseCountryName = req.params.cn
-            console.log(databaseCountryName);
-            console.log(date)
-            let getCountryData = await DataModel.aggregate([{$project:{
-                _id: 0, 
-                TotalCases:{$arrayElemAt:["$CountryData.TotalCases", {$indexOfArray:["$CountryData.CountryName",databaseCountryName]}]},
-                NewCases:{$arrayElemAt:["$CountryData.NewCases", {$indexOfArray:["$CountryData.CountryName",databaseCountryName]}]}
-            
-            }}])
-            
-                // {index:{$indexOfArray:["$CountryData.CountryName",databaseCountryName]}}])
+            let getCountryData = await DataModel.aggregate(
+                [
+                    
+                    {
+                       $match: {Date:date}
+                    },
+                    {
+                        $project:{
+                            _id:0
+                        }
+                    }
+       
+                ]
+            )
                
             res.send(JSON.stringify(getCountryData))
         } catch (error) {
@@ -49,19 +52,54 @@ router.use(bodyParser.urlencoded({extended: true}));
     }
     
     //Get only fix object array
-    const getCountryName = async function(req,res){
-        
-        
-        let getCountryData = await DataModel.aggregate([{$project:{"index":{$indexOfArray:["$CountryData.CountryName","Bangladesh"]}}}])
-            res.send(JSON.stringify(getCountryData))
-            //console.log(abc);
-            console.log(getCountryData);
+    const getDataDateAndCountryMatching = async function (req,res){
+        try {
+                
+            let date = req.params.date
+            let databaseCountryName = req.params.cn
+           
 
+            let getCountryData = await DataModel.aggregate(
+                [
+                    
+                    {
+                       $match: {Date:date}
+                    },
+                    {
+                        $project:{
+                        _id: 0,
+                        TotalCases:{$arrayElemAt:["$CountryData.TotalCases", 
+                            {$indexOfArray:["$CountryData.CountryName",databaseCountryName]}]},
+                        NewCases:{$arrayElemAt:["$CountryData.NewCases", 
+                            {$indexOfArray:["$CountryData.CountryName",databaseCountryName]}]},
+                        TotalDeaths: {$arrayElemAt:["$CountryData.TotalDeaths", 
+                            {$indexOfArray:["$CountryData.CountryName",databaseCountryName]}]},
+                        NewDeaths: {$arrayElemAt:["$CountryData.NewDeaths", 
+                            {$indexOfArray:["$CountryData.CountryName",databaseCountryName]}]},
+                        TotalRecovered: {$arrayElemAt:["$CountryData.TotalRecovered", 
+                            {$indexOfArray:["$CountryData.CountryName",databaseCountryName]}]},
+                        ActiveCases: {$arrayElemAt:["$CountryData.ActiveCases", 
+                            {$indexOfArray:["$CountryData.CountryName",databaseCountryName]}]},
+                        Serious: {$arrayElemAt:["$CountryData.Serious", 
+                            {$indexOfArray:["$CountryData.CountryName",databaseCountryName]}]},
+                        Population: {$arrayElemAt:["$CountryData.Population", 
+                            {$indexOfArray:["$CountryData.CountryName",databaseCountryName]}]},
+
+                    }
+                }                    
+                ]
+            )
+               
+            res.send(JSON.stringify(getCountryData))
+        } catch (error) {
+            console.log(error);
+            
+        }
     }
     
     router.get('/findAllData',getData).
-    get('/dataCountryname/:date/:cn',dataCountryName).
-    get('/getCountryName', getCountryName)
+    get('/getDataDateM/:date',getDataDateMatching).
+    get('/getDataDACM/:date/:cn', getDataDateAndCountryMatching)
      
 
 
