@@ -2,11 +2,9 @@ const express = require('express')
 const router = express.Router()
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
-//const mongoose = require('mongoose')
 const DataModel = require('../database/dataModel')
 const sData = require('../webScrpar/pageScrapper')
 const dataModel = require('../database/dataModel')
-
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({extended: true}));
 
@@ -51,23 +49,20 @@ router.use(bodyParser.urlencoded({extended: true}));
         }
     }
     
-    //Get only fix object array
+    //Get Data by date and country Matching
     const getDataDateAndCountryMatching = async function (req,res){
         try {
                 
             let date = req.params.date
             let databaseCountryName = req.params.cn
-           
-
             let getCountryData = await DataModel.aggregate(
-                [
-                    
+                [                    
                     {
                        $match: {Date:date}
                     },
                     {
                         $project:{
-                        _id: 0,
+                        _id: 0,                        
                         TotalCases:{$arrayElemAt:["$CountryData.TotalCases", 
                             {$indexOfArray:["$CountryData.CountryName",databaseCountryName]}]},
                         NewCases:{$arrayElemAt:["$CountryData.NewCases", 
@@ -83,11 +78,12 @@ router.use(bodyParser.urlencoded({extended: true}));
                         Serious: {$arrayElemAt:["$CountryData.Serious", 
                             {$indexOfArray:["$CountryData.CountryName",databaseCountryName]}]},
                         Population: {$arrayElemAt:["$CountryData.Population", 
-                            {$indexOfArray:["$CountryData.CountryName",databaseCountryName]}]},
+                            {$indexOfArray:["$CountryData.CountryName",databaseCountryName]}]}
 
                     }
                 }                    
                 ]
+                
             )
                
             res.send(JSON.stringify(getCountryData))
@@ -96,11 +92,47 @@ router.use(bodyParser.urlencoded({extended: true}));
             
         }
     }
+
+    // Delete duplicate date entrys Data
+
+    let CountCountry = async function(req,res){
+        let countCountry = await DataModel.aggregate([
+            {
+                $match: {Date:req.params.date}
+
+            },
+            {
+                $project:{
+                    _id:1,
+                    Date:1,
+                    "TotalCountry":{$cond:{if:{$isArray:"$CountryData.CountryName"},
+                    then:{$size:"$CountryData.CountryName"},else:"NA"}}
+                }
+            }
+        ])
+        res.send(JSON.stringify(countCountry))
+    }
+    
+    //Delete Data 
+    let deleteData = async function(req,res){
+        try {
+            let deleteData = await DataModel.deleteOne(
+                {"_id": req.params._id}           
+            )
+            res.send(JSON.stringify(deleteData))
+            
+        } catch (error) {
+            console.log(error);
+            
+        }
+
+    }
     
     router.get('/findAllData',getData).
     get('/getDataDateM/:date',getDataDateMatching).
-    get('/getDataDACM/:date/:cn', getDataDateAndCountryMatching)
-     
+    get('/getDataDACM/:date/:cn', getDataDateAndCountryMatching).
+    get('/countCountry/:date',CountCountry).
+    delete('/deleteData/:_id',deleteData)
 
 
-module.exports= router
+module.exports = router
