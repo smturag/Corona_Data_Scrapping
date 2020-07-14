@@ -1,8 +1,10 @@
 const express = require('express')
 const app = express()
+var cors = require('cors')
 const bodyParser = require('body-parser')
 const routerApi = require('./routerDefined')
 const insertingData = require('./insertDataApi')
+app.use(cors())
 
 const port = 300
 app.use(bodyParser.json());

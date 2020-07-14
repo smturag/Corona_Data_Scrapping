@@ -14,6 +14,7 @@
     "cheerio": "^1.0.0-rc.3",
     "cheerio-html-to-text": "^0.4.4",
     "cheerio-tableparser": "^1.0.1",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-param": "^1.4.0",
     "mongoose": "^5.9.20",
