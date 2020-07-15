@@ -15,7 +15,7 @@ router.use(bodyParser.urlencoded({extended: true}));
     const getData = async function(req,res){
         try {
             const getAllData = await DataModel.find()
-            res.send(JSON.stringify(getAllData))
+            res.send(JSON.stringify({getAllData}))
             console.log('Find All data');
         } catch (error) {
             console.log(err);
@@ -43,7 +43,7 @@ router.use(bodyParser.urlencoded({extended: true}));
                 ]
             )
             console.log('find country wise data '); 
-            res.send(JSON.stringify(getCountryData))
+            res.send(JSON.stringify({getCountryData}))
             
         } catch (error) {
             console.log(error);
@@ -88,7 +88,7 @@ router.use(bodyParser.urlencoded({extended: true}));
                 
             )
                console.log("getDataDateAndCountryMatching");
-            res.send(JSON.stringify(getCountryData))
+            res.send(JSON.stringify({getCountryData}))
         } catch (error) {
             console.log(error);
             
@@ -113,7 +113,7 @@ router.use(bodyParser.urlencoded({extended: true}));
             }
         ])
         console.log("CountCountry");
-        res.send(JSON.stringify(countCountry))
+        res.send(JSON.stringify({countCountry}))
     }
     
     //Delete Data 
@@ -123,7 +123,7 @@ router.use(bodyParser.urlencoded({extended: true}));
                 {"_id": req.params._id}           
             )
             console.log("deleteData");
-            res.send(JSON.stringify(deleteData))
+            res.send(JSON.stringify({deleteData}))
             
         } catch (error) {
             console.log(error);
